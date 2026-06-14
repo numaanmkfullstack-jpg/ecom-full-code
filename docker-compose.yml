@@ -1,0 +1,192 @@
+version: '3.8'
+
+# ============================================================
+# E-Commerce Microservices - Local Development Stack
+# ============================================================
+# Start:   docker compose up --build
+# Stop:    docker compose down
+# Wipe DB: docker compose down -v
+# UI:      http://localhost:8080
+# RabbitMQ management: http://localhost:15672 (guest/guest)
+# ============================================================
+
+services:
+
+  # ─────────────────────────────────────────────
+  # INFRASTRUCTURE
+  # ─────────────────────────────────────────────
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:6
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # management UI → http://localhost:15672 (guest/guest)
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # APPLICATION SERVICES
+  # ─────────────────────────────────────────────
+
+  email-service:
+    build: ./email-service
+    ports:
+      - "3005:3005"
+    environment:
+      SEND_REAL_EMAIL: "false"   # set to true + add SMTP creds to send real emails
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "3001:3001"
+    environment:
+      MONGO_USER: ""
+      MONGO_PASS: ""
+      MONGO_HOST: mongodb
+      MONGO_PORT: "27017"
+      MONGO_DB: products
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      CACHE_ENABLED: "true"
+      PORT: "3001"
+    volumes:
+      - product-uploads:/app/uploads
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3002:3002"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: orders
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_PORT: "5432"
+      RABBITMQ_HOST: "amqp://rabbitmq:5672"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "3003:3003"
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "3004:3004"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: inventory
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      RABBITMQ_HOST: rabbitmq
+      EMAIL_SERVICE_URL: "http://email-service:3005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      email-service:
+        condition: service_started
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      ORDER_SERVICE_HOST: order-service
+      PRODUCT_SERVICE_HOST: product-service
+      PAYMENT_SERVICE_HOST: payment-service
+    depends_on:
+      - order-service
+      - product-service
+      - payment-service
+
+  admin-ui:
+    build: ./admin-ui
+    ports:
+      - "8080:8080"
+    environment:
+      API_GATEWAY_HOST: api-gateway
+      PRODUCT_SERVICE_HOST: product-service
+      ORDER_SERVICE_HOST: order-service
+      PAYMENT_SERVICE_HOST: payment-service
+      INVENTORY_SERVICE_HOST: inventory-service
+      EMAIL_SERVICE_HOST: email-service
+    depends_on:
+      - api-gateway
+      - product-service
+      - order-service
+      - payment-service
+      - inventory-service
+      - email-service
+
+# ─────────────────────────────────────────────
+# VOLUMES (persistent data across restarts)
+# ─────────────────────────────────────────────
+
+volumes:
+  postgres-data:
+  mongodb-data:
+  redis-data:
+  rabbitmq-data:
+  product-uploads:

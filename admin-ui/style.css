@@ -1,0 +1,356 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #1a1a2e;
+    font-size: 28px;
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #16213e;
+    border-bottom: 3px solid #0f3460;
+    padding-bottom: 8px;
+    font-size: 20px;
+}
+
+.section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.health-card {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.health-card:hover {
+    transform: translateY(-2px);
+}
+
+.health-card.healthy {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border: 1px solid #9fdfa8;
+    color: #155724;
+}
+
+.health-card.unhealthy {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border: 1px solid #f1b0b7;
+    color: #721c24;
+}
+
+.health-card h3 {
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.health-card p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.health-card small {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.toolbar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary, .btn-danger {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #0f3460;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #16213e;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.form-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.form-card h3 {
+    margin-bottom: 15px;
+    color: #0f3460;
+}
+
+.form-card input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-card input:focus {
+    outline: none;
+    border-color: #0f3460;
+    box-shadow: 0 0 0 2px rgba(15,52,96,0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.data-grid {
+    overflow-x: auto;
+}
+
+.data-grid table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.data-grid th, .data-grid td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.data-grid th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.data-grid tr:hover {
+    background: #f8f9fa;
+}
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.error {
+    color: #dc3545;
+    text-align: center;
+    padding: 15px;
+    background: #f8d7da;
+    border-radius: 6px;
+}
+
+.info-box {
+    background: #e8f4f8;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #0f3460;
+}
+
+.info-box ul {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.info-box code {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+/* Inventory status styles */
+.low-stock {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.in-stock {
+    background: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+/* Inventory status styles */
+.low-stock {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.in-stock {
+    background: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Form label styling */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Modal styles for image upload */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+    color: #0f3460;
+}
+
+.modal-content input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Product image styles */
+.product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.product-image:hover {
+    transform: scale(1.1);
+}
+
+.image-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Inventory status styles */
+.low-stock {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.in-stock {
+    background: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Form label styling */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Table cell styling */
+.data-grid td {
+    vertical-align: middle;
+}

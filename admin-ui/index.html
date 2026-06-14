@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 E-Commerce System Admin Dashboard</h1>
+        
+        <!-- Service Health Status -->
+        <div class="section">
+            <h2>🟢 Service Health</h2>
+            <div id="health-status" class="health-grid">
+                <div class="loading">Loading service status...</div>
+            </div>
+        </div>
+
+        <!-- Product Service -->
+        <div class="section">
+            <h2>📦 Product Catalog (Product Service :3001)</h2>
+            <div class="toolbar">
+                <button onclick="showCreateProductForm()" class="btn-primary">➕ Add New Product</button>
+                <button onclick="loadProducts()" class="btn-secondary">🔄 Refresh</button>
+            </div>
+            <div id="create-product-form" style="display:none;" class="form-card">
+                <h3>Create New Product</h3>
+                <input type="text" id="product-name" placeholder="Product Name" required>
+                <input type="number" id="product-price" placeholder="Price" required>
+                <input type="text" id="product-category" placeholder="Category">
+                <div class="form-actions">
+                    <button onclick="createProduct()" class="btn-primary">Save</button>
+                    <button onclick="hideCreateProductForm()" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+            <div id="products-list" class="data-grid">
+                <div class="loading">Loading products...</div>
+            </div>
+        </div>
+
+        <!-- Order Service -->
+        <div class="section">
+            <h2>🛒 Orders (Order Service :3002)</h2>
+            <div class="toolbar">
+                <button onclick="showCreateOrderForm()" class="btn-primary">➕ Create Order</button>
+                <button onclick="loadOrders()" class="btn-secondary">🔄 Refresh</button>
+            </div>
+            <div id="create-order-form" style="display:none;" class="form-card">
+                <h3>Create New Order</h3>
+                <input type="text" id="order-id" placeholder="Order ID (e.g., order-001)">
+                <input type="text" id="user-id" placeholder="User ID">
+                <select id="product-select" style="width:100%; padding:10px; margin-bottom:12px;">
+                    <option value="">-- Select a product --</option>
+                </select>
+                <input type="number" id="order-quantity" placeholder="Quantity" value="1">
+                <input type="number" id="order-total" placeholder="Total Amount">
+                <div class="form-actions">
+                    <button onclick="createOrder()" class="btn-primary">Place Order</button>
+                    <button onclick="hideCreateOrderForm()" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+            <div id="orders-list" class="data-grid">
+                <div class="loading">Orders will appear here after creation...</div>
+            </div>
+        </div>
+
+        <!-- Inventory Stock -->
+        <div class="section">
+            <h2>📦 Inventory Stock (Inventory Service)</h2>
+            <div class="toolbar">
+                <button onclick="loadInventory()" class="btn-secondary">🔄 Refresh Stock</button>
+            </div>
+            <div id="inventory-list" class="data-grid">
+                <div class="loading">Loading inventory...</div>
+            </div>
+        </div>
+
+        <!-- Add Stock -->
+        <div class="section">
+            <h2>➕ Add Stock to Inventory</h2>
+            <div class="form-card">
+                <input type="text" id="stock-product-id" placeholder="Product ID">
+                <select id="stock-product-select" style="width:100%; padding:10px; margin-bottom:12px;">
+                    <option value="">-- Select a product --</option>
+                </select>
+                <input type="number" id="stock-quantity" placeholder="Quantity" value="100">
+                <div class="form-actions">
+                    <button onclick="addStock()" class="btn-primary">Add Stock</button>
+                    <button onclick="clearStockForm()" class="btn-secondary">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Gateway Info -->
+        <div class="section">
+            <h2>🌐 API Gateway (Port :3000)</h2>
+            <div class="info-box">
+                <p><strong>Available endpoints:</strong></p>
+                <ul>
+                    <li><code>GET /api/products/:id</code> - Get product details</li>
+                    <li><code>POST /api/orders</code> - Create new order</li>
+                    <li><code>GET /api/orders/:id</code> - Get order status</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
