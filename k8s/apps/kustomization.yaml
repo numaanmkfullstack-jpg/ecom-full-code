@@ -9,3 +9,20 @@ resources:
   - inventory-service.yaml
   - email-service.yaml
   - admin-ui.yaml
+
+# Image Updater tracks :latest digests and writes overrides via Argo CD Application spec
+images:
+  - name: iamnmk777/ecom-api-gateway
+    newTag: latest
+  - name: iamnmk777/ecom-product-service
+    newTag: latest
+  - name: iamnmk777/ecom-order-service
+    newTag: latest
+  - name: iamnmk777/ecom-payment-service
+    newTag: latest
+  - name: iamnmk777/ecom-inventory-service
+    newTag: latest
+  - name: iamnmk777/ecom-email-service
+    newTag: latest
+  - name: iamnmk777/ecom-admin-ui
+    newTag: latest
