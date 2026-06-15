@@ -1,0 +1,22 @@
+# Expose ArgoCD UI via Traefik (same port 80, routes by hostname)
+# Add to Windows hosts: 127.0.0.1  argocd.devops.local
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: argocd.devops.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port:
+              number: 80

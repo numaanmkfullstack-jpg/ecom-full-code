@@ -1,0 +1,48 @@
+# ArgoCD Application — watches k8s/app manifests in ecom-full-code (Git)
+# Image Updater watches Docker Hub for new :latest digests (pushed by Jenkins)
+#
+# Flow:
+#   1. You push code to a service repo → Jenkins builds → pushes iamnmk777/ecom-*:latest
+#   2. Image Updater sees new digest → updates this Application
+#   3. ArgoCD auto-syncs → K3s rolls out the new pod
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecom
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: >-
+      api-gateway=iamnmk777/ecom-api-gateway,
+      product-service=iamnmk777/ecom-product-service,
+      order-service=iamnmk777/ecom-order-service,
+      payment-service=iamnmk777/ecom-payment-service,
+      inventory-service=iamnmk777/ecom-inventory-service,
+      email-service=iamnmk777/ecom-email-service,
+      admin-ui=iamnmk777/ecom-admin-ui
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+    argocd-image-updater.argoproj.io/write-back-target: spec
+    # Manifests use :latest — track digest changes when Jenkins pushes a new image
+    argocd-image-updater.argoproj.io/api-gateway.update-strategy: digest
+    argocd-image-updater.argoproj.io/product-service.update-strategy: digest
+    argocd-image-updater.argoproj.io/order-service.update-strategy: digest
+    argocd-image-updater.argoproj.io/payment-service.update-strategy: digest
+    argocd-image-updater.argoproj.io/inventory-service.update-strategy: digest
+    argocd-image-updater.argoproj.io/email-service.update-strategy: digest
+    argocd-image-updater.argoproj.io/admin-ui.update-strategy: digest
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/numaanmkfullstack-jpg/ecom-full-code.git
+    targetRevision: main
+    path: k8s/apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ecom
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

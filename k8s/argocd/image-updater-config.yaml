@@ -1,0 +1,14 @@
+# Patch Image Updater to use Docker Hub (public images — no credentials needed)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-image-updater-config
+  namespace: argocd
+data:
+  registries.conf: |
+    registries:
+    - name: Docker Hub
+      prefix: docker.io
+      api_url: https://registry-1.docker.io
+      default: true
+  log.level: info
