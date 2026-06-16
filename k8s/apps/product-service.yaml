@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: product-service
-        image: iamnmk777/ecom-product-service:latest
+        image: iamnmk777/ecom-product-service:staging
         imagePullPolicy: Always
         ports:
         - containerPort: 3001

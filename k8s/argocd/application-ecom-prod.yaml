@@ -1,43 +1,43 @@
-# Staging / preprod — APP VM (192.168.56.10)
-# Alias: use application-ecom-staging.yaml (replaces legacy application-ecom.yaml)
+# Production — PROD APP VM (192.168.56.12 after clone)
+# Jenkins main branch + manual approval → :prod tag → Image Updater on prod cluster
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ecom-staging
+  name: ecom-prod
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd-image-updater.argoproj.io/image-list: >-
-      api-gateway=iamnmk777/ecom-api-gateway:staging,
-      product-service=iamnmk777/ecom-product-service:staging,
-      order-service=iamnmk777/ecom-order-service:staging,
-      payment-service=iamnmk777/ecom-payment-service:staging,
-      inventory-service=iamnmk777/ecom-inventory-service:staging,
-      email-service=iamnmk777/ecom-email-service:staging,
-      admin-ui=iamnmk777/ecom-admin-ui:staging
+      api-gateway=iamnmk777/ecom-api-gateway:prod,
+      product-service=iamnmk777/ecom-product-service:prod,
+      order-service=iamnmk777/ecom-order-service:prod,
+      payment-service=iamnmk777/ecom-payment-service:prod,
+      inventory-service=iamnmk777/ecom-inventory-service:prod,
+      email-service=iamnmk777/ecom-email-service:prod,
+      admin-ui=iamnmk777/ecom-admin-ui:prod
     argocd-image-updater.argoproj.io/write-back-method: argocd
     argocd-image-updater.argoproj.io/write-back-target: spec
     argocd-image-updater.argoproj.io/api-gateway.update-strategy: digest
-    argocd-image-updater.argoproj.io/api-gateway.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/api-gateway.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/product-service.update-strategy: digest
-    argocd-image-updater.argoproj.io/product-service.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/product-service.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/order-service.update-strategy: digest
-    argocd-image-updater.argoproj.io/order-service.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/order-service.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/payment-service.update-strategy: digest
-    argocd-image-updater.argoproj.io/payment-service.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/payment-service.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/inventory-service.update-strategy: digest
-    argocd-image-updater.argoproj.io/inventory-service.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/inventory-service.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/email-service.update-strategy: digest
-    argocd-image-updater.argoproj.io/email-service.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/email-service.allow-tags: regexp:^prod$
     argocd-image-updater.argoproj.io/admin-ui.update-strategy: digest
-    argocd-image-updater.argoproj.io/admin-ui.allow-tags: regexp:^staging$
+    argocd-image-updater.argoproj.io/admin-ui.allow-tags: regexp:^prod$
 spec:
   project: default
   source:
     repoURL: https://github.com/numaanmkfullstack-jpg/ecom-full-code.git
     targetRevision: main
-    path: k8s/apps
+    path: k8s/apps-prod
   destination:
     server: https://kubernetes.default.svc
     namespace: ecom

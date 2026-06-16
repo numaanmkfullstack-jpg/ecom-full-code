@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: admin-ui
-        image: iamnmk777/ecom-admin-ui:staging
+        image: iamnmk777/ecom-admin-ui:prod
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

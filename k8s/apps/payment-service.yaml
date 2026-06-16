@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: payment-service
-        image: iamnmk777/ecom-payment-service:latest
+        image: iamnmk777/ecom-payment-service:staging
         imagePullPolicy: Always
         ports:
         - containerPort: 3003

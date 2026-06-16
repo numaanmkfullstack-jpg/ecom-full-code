@@ -6,6 +6,8 @@
 # ============================================================
 
 set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
 echo ""
 echo "=== Step 1: Namespace, Secrets, ConfigMaps ==="
@@ -26,8 +28,8 @@ kubectl wait --for=condition=ready pod -l app=redis     -n ecom --timeout=120s
 kubectl wait --for=condition=ready pod -l app=rabbitmq  -n ecom --timeout=180s
 
 echo ""
-echo "=== Step 4: Application Services ==="
-kubectl apply -f apps/
+echo "=== Step 4: Application Services (Kustomize) ==="
+kubectl apply -k apps/
 
 echo ""
 echo "=== Step 5: Ingress ==="

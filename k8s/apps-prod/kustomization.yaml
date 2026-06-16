@@ -12,16 +12,16 @@ resources:
 
 images:
   - name: iamnmk777/ecom-api-gateway
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-product-service
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-order-service
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-payment-service
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-inventory-service
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-email-service
-    newTag: staging
+    newTag: prod
   - name: iamnmk777/ecom-admin-ui
-    newTag: staging
+    newTag: prod

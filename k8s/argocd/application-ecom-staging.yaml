@@ -1,5 +1,5 @@
 # Staging / preprod — APP VM (192.168.56.10)
-# Alias: use application-ecom-staging.yaml (replaces legacy application-ecom.yaml)
+# Jenkins stage branch → :staging tag → Image Updater on this cluster
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

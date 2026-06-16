@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: order-service
-        image: iamnmk777/ecom-order-service:staging
+        image: iamnmk777/ecom-order-service:prod
         imagePullPolicy: Always
         ports:
         - containerPort: 3002

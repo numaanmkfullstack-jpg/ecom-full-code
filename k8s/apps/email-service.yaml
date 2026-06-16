@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: email-service
-        image: iamnmk777/ecom-email-service:latest
+        image: iamnmk777/ecom-email-service:staging
         imagePullPolicy: Always
         ports:
         - containerPort: 3005
